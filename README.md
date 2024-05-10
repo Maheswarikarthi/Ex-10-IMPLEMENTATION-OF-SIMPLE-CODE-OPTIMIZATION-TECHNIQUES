@@ -1,5 +1,4 @@
-# Ex-10-IMPLEMENTATION-OF-SIMPLE-CODE-OPTIMIZATION-TECHNIQUES
-IMPLEMENTATION OF SIMPLE CODE OPTIMIZATION TECHNIQUES 
+# Ex-10 IMPLEMENTATION OF SIMPLE CODE OPTIMIZATION TECHNIQUES
 # Date:
 # Aim:
 To write a C program to implement simple code optimization techniques such as Common subexpression elimination and Dead Code elimination.
@@ -12,78 +11,60 @@ To write a C program to implement simple code optimization techniques such as Co
 # PROGRAM
 # exp10.c
 ```
-#include <stdio.h> #include <string.h>
-
-struct op { char l; char r[20];
-} op[10], pr[10];
+#include<stdio.h>
+#include<ctype.h>
 
 int main() {
-int a, i, k, j, n, z = 0, m, q; char *p, *l;
-char temp, t; char *tem;
+    int i = 2, j = 0, k = 2, k1 = 0;
+    char ip[10], kk[10];
+    FILE *fp;
 
-printf("Enter the Number of Values: "); scanf("%d", &n);
+    printf("\nEnter the filename of the intermediate code: ");
+    scanf("%s", kk);
 
-for (i = 0; i < n; i++) { printf("left: ");
-scanf(" %c", &op[i].l); // Notice the space before %c to consume the newline character printf("\tright: ");
-scanf("%s", op[i].r);
-}
+    fp = fopen(kk, "r");
+    if(fp == NULL) {
+        printf("\nError in opening the file\n");
+        return 1; // Exiting the program with error code
+    }
 
-printf("Intermediate Code\n"); for (i = 0; i < n; i++) {
-printf("%c=%s\n", op[i].l, op[i].r);
-}
+    printf("\n");
+    while(fscanf(fp, "%s", ip) != EOF) {
+        printf("\t\t%s\n", ip);
+    }
+    rewind(fp);
 
-for (i = 0; i < n - 1; i++) { temp = op[i].l;
-for (j = 0; j < n; j++) {
-p = strchr(op[j].r, temp); if (p) {
-pr[z].l = op[i].l; strcpy(pr[z].r, op[i].r); z++;
-}
-}
-}
- 
-pr[z].l = op[n - 1].l;
-strcpy(pr[z].r, op[n - 1].r); z++;
-printf("\nAfter Dead Code Elimination\n"); for (k = 0; k < z; k++) {
-printf("%c\t=%s\n", pr[k].l, pr[k].r);
-}
+    printf("\n \n");
+    printf("\tStatement\t\tTarget Code\n");
+    printf("\n \n");
 
-for (m = 0; m < z; m++) { tem = pr[m].r;
-for (j = m + 1; j < z; j++) { p = strstr(tem, pr[j].r); if (p) {
-t = pr[j].l;
-pr[j].l = pr[m].l;
-for (i = 0; i < z; i++) { l = strchr(pr[i].r, t); if (l) {
-a = l - pr[i].r;
-printf("pos: %d", a);
-pr[i].r[a] = pr[m].l;
-}
-}
-}
-}
-}
+    while(fscanf(fp, "%s", ip) != EOF) {
+        printf("\t%s", ip);
+        printf("\t\tMOV %c,R%d\n\t", ip[i + k], j);
 
-printf("Eliminate Common Expression\n"); for (i = 0; i < z; i++) {
-printf("%c=%s\n", pr[i].l, pr[i].r);
-}
+        if(ip[i + 1] == '+') {
+            printf("\t\tADD");
+        } else {
+            printf("\t\tSUB");
+        }
 
-for (i = 0; i < z; i++) {
-for (j = i + 1; j < z; j++) {
-q = strcmp(pr[i].r, pr[j].r);
-if ((pr[i].l == pr[j].l) && !q) { pr[i].l = '\0'; strcpy(pr[i].r, '\0');
-}
-}
-}
- 
-printf("Optimized Code\n"); for (i = 0; i < z; i++) {
-if (pr[i].l != '\0') { printf("%c=%s\n", pr[i].l, pr[i].r);
-}
-}
+        if(islower(ip[i])) {
+            printf("%c,R%d\n\n", ip[i + k1], j);
+        } else {
+            printf("%c,%c\n", ip[i], ip[i + 2]);
+        }
+        j++;
+        k1 = 2;
+        k = 0;
+    }
 
-
-
-return 0;
+    printf("\n \n");
+    fclose(fp);
+    return 0; // Indicating successful execution
 }
 ```
 # OUTPUT
-![image](https://github.com/Maheswarikarthi/Ex-10-IMPLEMENTATION-OF-SIMPLE-CODE-OPTIMIZATION-TECHNIQUES/assets/127172770/9aa16bca-b11b-4836-b20e-49e530a372c0)
+![image](https://github.com/Maheswarikarthi/Ex-10-IMPLEMENTATION-OF-SIMPLE-CODE-OPTIMIZATION-TECHNIQUES/assets/127172770/8ddd967b-72c5-4eea-865a-7ad632c32e31)
 
 # RESULT
 The simple code optimization techniques such as common subexpression elimination and dead code elimination are implemented successfully and the output is verified.
